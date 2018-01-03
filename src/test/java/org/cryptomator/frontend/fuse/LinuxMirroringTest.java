@@ -1,5 +1,9 @@
 package org.cryptomator.frontend.fuse;
 
+import org.cryptomator.cryptofs.CryptoFileSystem;
+import org.cryptomator.cryptofs.CryptoFileSystemProperties;
+import org.cryptomator.cryptofs.CryptoFileSystemProvider;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,7 +21,10 @@ public class LinuxMirroringTest {
 			System.out.println("Enter mount point:");
 			Path m = Paths.get(scanner.nextLine());
 			if (Files.isDirectory(p) && Files.isDirectory(m)) {
-				try (FuseNioAdapter fs = AdapterFactory.createReadWriteAdapter(p)) {
+				CryptoFileSystemProperties properties = CryptoFileSystemProperties.withPassphrase("asd").withFlags().build();
+				CryptoFileSystem cfs = CryptoFileSystemProvider.newFileSystem(p, properties);
+				try (FuseNioAdapter fs = AdapterFactory.createReadWriteAdapter(cfs.getPath("/"))) {
+				//try (FuseNioAdapter fs = AdapterFactory.createReadWriteAdapter(p)) {
 					fs.mount(m, false, false, new String[]{"-ouid="+uid, "-ogid="+gid, "-oatomic_o_trunc"});
 					System.out.println("Mounted successfully. Enter anything to stop the server...");
 					System.in.read();

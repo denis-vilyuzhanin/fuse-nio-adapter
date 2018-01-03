@@ -52,6 +52,13 @@
 	</repositories>
 
 	<dependencies>
+		<!-- CryptoFS -->
+		<dependency>
+			<groupId>org.cryptomator</groupId>
+			<artifactId>cryptofs</artifactId>
+			<version>1.4.5</version>
+		</dependency>
+
 		<!-- FUSE -->
 		<dependency>
 			<groupId>com.github.serceman</groupId>
